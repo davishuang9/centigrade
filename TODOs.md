@@ -6,15 +6,15 @@
 - [X] APIs for basic browsing for all the products
   - [X] Paginate all products endpoint
   - [X] GET 1 product endpoint
-- [ ] APIs for user login
+- [X] APIs for user login
+- [X] Add some disk cache for storage
 
 ## Authentication
 
 - [ ] Provide user login support via the API and use storage for auth
-- [ ] Add some disk cache for storage
 - [ ] Authorize the user with a local user store and provide a JWT token
 
-## Frontend Requirements
+## Frontend Tasks
 
 - [X] Use a packager for builds such as parcel or babel (using vite)
 - [X] Create the application as a REACT browser application

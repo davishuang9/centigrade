@@ -2,6 +2,9 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 import httpx
 from pydantic import BaseModel
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.inmemory import InMemoryBackend
+from fastapi_cache.decorator import cache
 
 app = FastAPI()
 
@@ -40,6 +43,11 @@ class PaginatedProducts(BaseModel):
     total_pages: int
 
 
+@app.on_event("startup")
+async def on_startup():
+    FastAPICache.init(InMemoryBackend())
+
+
 @app.get("/")
 async def root():
     return {"message": "Welcome to the FastAPI Backend"}
@@ -51,6 +59,7 @@ async def health_check():
 
 
 @app.get("/api/products", response_model=PaginatedProducts)
+@cache(expire=60)
 async def get_products(
     page: int = Query(default=1, ge=1, description="Page number"),
     page_size: int = Query(
@@ -95,6 +104,7 @@ async def get_products(
 
 
 @app.get("/api/products/{product_id}", response_model=Product)
+@cache(expire=60)
 async def get_product(product_id: int):
     """
     Fetch a single product by ID from the Fake Store API
@@ -117,6 +127,7 @@ class UserCredentials(BaseModel):
 
 
 @app.post("/api/login")
+@cache(expire=60)
 async def user_login(credentials: UserCredentials):
     """
     Authenticate user and return token
