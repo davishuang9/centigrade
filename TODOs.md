@@ -3,9 +3,9 @@
 ## Backend Tasks
 
 - [X] Wrap the Fake Store API in your own FastAPI based api
-- [ ] APIs for basic browsing for all the products
+- [X] APIs for basic browsing for all the products
   - [X] Paginate all products endpoint
-  - [ ] GET 1 product endpoint
+  - [X] GET 1 product endpoint
 - [ ] APIs for user login
 
 ## Authentication
