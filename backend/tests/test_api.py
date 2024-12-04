@@ -22,3 +22,18 @@ async def test_pagination():
     assert data["page"] == 2
     assert data["page_size"] == 5
     assert len(data["items"]) <= 5
+
+@pytest.mark.asyncio
+async def test_get_product_by_id():
+    product_id = 1  # Example product ID
+    async with AsyncClient(app=app, base_url="http://test") as ac:
+        response = await ac.get(f"/api/products/{product_id}")
+    assert response.status_code == 200
+    product = response.json()
+    assert product["id"] == product_id
+    assert "title" in product
+    assert "price" in product
+    assert "description" in product
+    assert "category" in product
+    assert "image" in product
+    assert "rating" in product
