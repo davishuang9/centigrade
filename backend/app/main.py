@@ -14,6 +14,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+class ProductRating(BaseModel):
+    rate: float
+    count: int
+
 # Define product model
 class Product(BaseModel):
     id: int
@@ -22,7 +26,7 @@ class Product(BaseModel):
     description: str
     category: str
     image: str
-    rating: dict
+    rating: ProductRating
 
 # Define paginated response model
 class PaginatedProducts(BaseModel):
@@ -78,3 +82,17 @@ async def get_products(
             
         except httpx.HTTPError as e:
             raise HTTPException(status_code=503, detail="Failed to fetch products from external API")
+
+@app.get("/api/products/{product_id}", response_model=Product)
+async def get_product(product_id: int):
+    """
+    Fetch a single product by ID from the Fake Store API
+    """
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(f"https://fakestoreapi.com/products/{product_id}")
+            response.raise_for_status()
+            product = response.json()
+            return product
+        except httpx.HTTPError as e:
+            raise HTTPException(status_code=404, detail="Product not found")
