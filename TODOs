@@ -1,0 +1,17 @@
+Wrap the Fake Store API in your own FastAPI based api
+- APIs for basic browsing
+- APIs for user login
+
+Provide user login support via the API and use storage for auth
+Aurthorize the user with a local user store and provide a JWT token
+
+Use a packager for builds such as parcel or babel
+Create the application as a REACT browser application
+Some use of component design in ways that make sense to you
+Use a storage framework to track and manage state of the user
+Provide basic browsing of all entities
+
+Add some disk cache for storage
+Use tailwinds-css for styling
+
+Use Github to share your response
