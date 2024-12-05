@@ -6,9 +6,10 @@ function Welcome() {
 
   return (
     <div>
-      <h1>Welcome to Centigrade!</h1>
+      <h1>Welcome to Centigrade's Fake Store!</h1>
       <p>You are now logged in.</p>
       <button onClick={logout}>Logout</button>
+      <div>product wheel here</div>
     </div>
   );
 }

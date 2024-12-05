@@ -21,7 +21,7 @@
 - [ ] Some use of component design in ways that make sense to you
   - [ ] Add component for product display
     - [ ] handle imgs
-- [ ] Use a storage framework to track and manage state of the user (react context)
+- [X] Use a storage framework to track and manage state of the user (react context)
 - [ ] Provide basic browsing of all entities
   - [ ] landing page that fetches all entities in a paginated way
 
