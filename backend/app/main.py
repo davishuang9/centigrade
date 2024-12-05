@@ -1,5 +1,5 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
 import httpx
 from pydantic import BaseModel
@@ -130,18 +130,29 @@ class UserCredentials(BaseModel):
     password: str
 
 
-@app.post("/api/login")
+@app.post("/api/login", response_model=str)
 @cache(expire=60)
-async def user_login(credentials: UserCredentials):
+async def user_login(response: Response, credentials: UserCredentials):
     """
     Authenticate user and return token
     """
     async with httpx.AsyncClient() as client:
         try:
-            response = await client.post(
+            r = await client.post(
                 "https://fakestoreapi.com/auth/login", json=credentials.model_dump()
             )
-            response.raise_for_status()
-            return response.json()
+            r.raise_for_status()
+            token = r.json().get("token")
+
+            # Set the cookie in the response
+            response.set_cookie(
+                key="access_token",
+                value=token,
+                httponly=True,
+                secure=True,
+                samesite="strict",
+            )
+
+            return "Login successful"
         except httpx.HTTPError as e:
             raise HTTPException(status_code=401, detail="Invalid credentials")

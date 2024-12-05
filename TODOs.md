@@ -11,8 +11,8 @@
 
 ## Authentication
 
-- [ ] Provide user login support via the API and use storage for auth
-- [ ] Authorize the user with a local user store and provide a JWT token
+- [X] Provide user login support via the API and use storage for auth
+- [X] Authorize the user with a local user store and provide a JWT token
 
 ## Frontend Tasks
 
