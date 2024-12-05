@@ -57,11 +57,6 @@ async def root():
     return {"message": "Welcome to the FastAPI Backend"}
 
 
-@app.get("/health")
-async def health_check():
-    return {"status": "healthy"}
-
-
 @app.get("/api/products", response_model=PaginatedProducts)
 @cache(expire=60)
 async def get_products(
