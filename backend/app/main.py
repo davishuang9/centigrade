@@ -66,7 +66,7 @@ async def get_products(
     ),
 ):
     """
-    Fetch products from the Fake Store API with pagination
+    Get products from the Fake Store API with pagination
     """
     async with httpx.AsyncClient() as client:
         try:
@@ -106,7 +106,7 @@ async def get_products(
 @cache(expire=60)
 async def get_product(product_id: int):
     """
-    Fetch a single product by ID from the Fake Store API
+    Get a single product by ID from the Fake Store API
     """
     async with httpx.AsyncClient() as client:
         try:
@@ -128,7 +128,7 @@ class UserCredentials(BaseModel):
 @app.post("/api/login")
 async def user_login(response: Response, credentials: UserCredentials):
     """
-    Authenticate user and return token
+    Authenticate user with Fake Store API and get JWT token in cookie
     """
     async with httpx.AsyncClient() as client:
         try:
@@ -136,6 +136,8 @@ async def user_login(response: Response, credentials: UserCredentials):
                 "https://fakestoreapi.com/auth/login", json=credentials.dict()
             )
             r.raise_for_status()
+
+            # TODO: add an in-memory storage for token with timeout
             token = r.json().get("token")
 
             # Set the cookie in the response
@@ -154,6 +156,9 @@ async def user_login(response: Response, credentials: UserCredentials):
 
 @app.get("/api/verify-auth")
 async def verify_auth(access_token: str | None = Cookie(default=None)):
+    """
+    Verify user is still authenticated
+    """
     if not access_token:
         raise HTTPException(status_code=401, detail="Not authenticated")
 
@@ -164,6 +169,9 @@ async def verify_auth(access_token: str | None = Cookie(default=None)):
 
 @app.post("/api/logout")
 async def logout(response: Response):
+    """
+    Log a user out clearing the JWT cookie
+    """
     response.delete_cookie(
         key="access_token",
         httponly=True,
