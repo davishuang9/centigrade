@@ -34,43 +34,11 @@ This will start both the backend and frontend services:
 - Backend: http://localhost:8000
 - API Documentation: http://localhost:8000/docs
 
-### Running Services Individually
+## Some thoughts
 
-#### Backend
+Pretty straightforward fullstack project with FastAPI backend and React frontend. Made an early design decision to not try and replicate an in-memory database in the backend given we're operating without a DB. Instead, just slapped on a 3rd party cache library that hopefully meets the criteria of "add some disk cache for storage."
 
-1. Navigate to the backend directory:
-```bash
-cd backend
-```
+Also, I didn't realize a requirement was _all entities_ rather than just products. Hopefully the products endpoint is representative of what the other endpoints would look like for carts and users.
 
-2. Build the Docker image:
-```bash
-docker build -t backend .
-```
+Please let me know if you have any questions!
 
-3. Run the container:
-```bash
-docker run -p 8000:8000 backend
-```
-
-#### Frontend
-
-1. Navigate to the frontend directory:
-```bash
-cd frontend
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Run the development server:
-```bash
-npm run dev
-```
-
-## API Endpoints
-
-- `GET /`: Welcome message
-- `GET /health`: Health check endpoint

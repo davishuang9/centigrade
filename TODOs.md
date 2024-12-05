@@ -27,7 +27,7 @@
 
 ## Styling
 
-- [ ] Use tailwinds-css for styling
+- [X] Use tailwinds-css for styling
 
 ## Submission
 

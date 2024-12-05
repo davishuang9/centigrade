@@ -11,7 +11,7 @@ function Header() {
       {isAuthenticated ? (
         <button
           onClick={logout}
-          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+          className="px-4 py-2 text-white bg-red-500 rounded transition-colors hover:bg-red-600"
         >
           Logout
         </button>

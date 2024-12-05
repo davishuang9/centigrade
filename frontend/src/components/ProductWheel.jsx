@@ -3,6 +3,8 @@ import api from '../api/axios';
 import ProductCard from './ProductCard';
 
 function ProductWheel() {
+  // Product list is replaced when the page changes; smoother UX would be 
+  // to hold onto a larger list of products in state instead of just 5 per page
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -31,36 +33,34 @@ function ProductWheel() {
   const nextPage = () => setPage(prev => Math.min(totalPages, prev + 1));
   const prevPage = () => setPage(prev => Math.max(1, prev - 1));
 
-  if (loading) return <div className="text-center p-4">Loading products...</div>;
-  if (error) return <div className="text-center text-red-500 p-4">{error}</div>;
+  if (loading) return <div className="p-4 text-center">Loading products...</div>;
+  if (error) return <div className="p-4 text-center text-red-500">{error}</div>;
 
   return (
-    <div className="mx-auto p-4">
-      <div className="relative">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-          {products.map(product => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-        <div className="flex justify-between items-center mt-4">
-          <button
-            onClick={prevPage}
-            disabled={page === 1}
-            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 hover:bg-gray-300"
-          >
-            Previous
-          </button>
-          <span className="text-sm text-gray-600">
-            Page {page} of {totalPages}
-          </span>
-          <button
-            onClick={nextPage}
-            disabled={page === totalPages}
-            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 hover:bg-gray-300"
-          >
-            Next
-          </button>
-        </div>
+    <div className="p-4 mx-auto">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        {products.map(product => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
+      <div className="flex justify-between items-center mt-4">
+        <button
+          onClick={prevPage}
+          disabled={page === 1}
+          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 hover:bg-gray-300"
+        >
+          Previous
+        </button>
+        <span className="text-sm text-gray-600">
+          Page {page} of {totalPages}
+        </span>
+        <button
+          onClick={nextPage}
+          disabled={page === totalPages}
+          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 hover:bg-gray-300"
+        >
+          Next
+        </button>
       </div>
     </div>
   );
