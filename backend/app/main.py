@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 import httpx
@@ -6,7 +7,15 @@ from fastapi_cache import FastAPICache
 from fastapi_cache.backends.inmemory import InMemoryBackend
 from fastapi_cache.decorator import cache
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    FastAPICache.init(InMemoryBackend())
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
+
 
 # Configure CORS
 app.add_middleware(
@@ -41,11 +50,6 @@ class PaginatedProducts(BaseModel):
     page: int
     page_size: int
     total_pages: int
-
-
-@app.on_event("startup")
-async def on_startup():
-    FastAPICache.init(InMemoryBackend())
 
 
 @app.get("/")
@@ -135,7 +139,7 @@ async def user_login(credentials: UserCredentials):
     async with httpx.AsyncClient() as client:
         try:
             response = await client.post(
-                "https://fakestoreapi.com/auth/login", json=credentials.dict()
+                "https://fakestoreapi.com/auth/login", json=credentials.model_dump()
             )
             response.raise_for_status()
             return response.json()
