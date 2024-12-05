@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import api from "../api/axios";
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const { login } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -18,6 +20,7 @@ function Login() {
         password,
       });
       setSuccessMessage("Login successful!");
+      login(); // Update auth context
     } catch (err) {
       setError("Invalid credentials");
     }

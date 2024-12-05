@@ -1,5 +1,5 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, HTTPException, Query, Response
+from fastapi import FastAPI, HTTPException, Query, Response, Cookie
 from fastapi.middleware.cors import CORSMiddleware
 import httpx
 from pydantic import BaseModel
@@ -130,8 +130,7 @@ class UserCredentials(BaseModel):
     password: str
 
 
-@app.post("/api/login", response_model=str)
-@cache(expire=60)
+@app.post("/api/login")
 async def user_login(response: Response, credentials: UserCredentials):
     """
     Authenticate user and return token
@@ -139,7 +138,7 @@ async def user_login(response: Response, credentials: UserCredentials):
     async with httpx.AsyncClient() as client:
         try:
             r = await client.post(
-                "https://fakestoreapi.com/auth/login", json=credentials.model_dump()
+                "https://fakestoreapi.com/auth/login", json=credentials.dict()
             )
             r.raise_for_status()
             token = r.json().get("token")
@@ -153,6 +152,27 @@ async def user_login(response: Response, credentials: UserCredentials):
                 samesite="strict",
             )
 
-            return "Login successful"
+            return {"message": "Login successful"}
         except httpx.HTTPError as e:
             raise HTTPException(status_code=401, detail="Invalid credentials")
+
+
+@app.get("/api/verify-auth")
+async def verify_auth(access_token: str | None = Cookie(default=None)):
+    if not access_token:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
+    # Ideally, verify JWT here but since we're not handling JWT creation
+    # we'll just assume the token is valid
+    return {"authenticated": True}
+
+
+@app.post("/api/logout")
+async def logout(response: Response):
+    response.delete_cookie(
+        key="access_token",
+        httponly=True,
+        secure=True,
+        samesite="strict"
+    )
+    return {"message": "Logged out successfully"}
