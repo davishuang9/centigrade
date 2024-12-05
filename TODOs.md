@@ -18,12 +18,12 @@
 
 - [X] Use a packager for builds such as parcel or babel (using vite)
 - [X] Create the application as a REACT browser application
-- [ ] Some use of component design in ways that make sense to you
-  - [ ] Add component for product display
-    - [ ] handle imgs
+- [X] Some use of component design in ways that make sense to you
+  - [X] Add component for product display
+    - [X] handle imgs
 - [X] Use a storage framework to track and manage state of the user (react context)
-- [ ] Provide basic browsing of all entities
-  - [ ] landing page that fetches all entities in a paginated way
+- [X] Provide basic browsing of all entities
+  - [X] landing page that fetches all entities in a paginated way
 
 ## Styling
 

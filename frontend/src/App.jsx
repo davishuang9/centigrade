@@ -1,12 +1,17 @@
 import React from 'react';
-import Welcome from './components/Welcome';
 import Header from './components/Header';
+import ProductWheel from './components/ProductWheel';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 function AppContent() {
-  // Logic to be moved to routes in a larger app
   const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <Welcome /> : <div>Please login to continue!</div>;
+  return isAuthenticated ? (
+    <div className="container mx-auto px-4">
+      <ProductWheel />
+    </div>
+  ) : (
+    <div className="text-center p-4">Please login to continue!</div>
+  );
 }
 
 function App() {
